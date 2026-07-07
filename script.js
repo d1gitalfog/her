@@ -116,7 +116,7 @@ function renderQuestion() {
   input.focus();
 
   // button label on the last question
-  $('#qNext').textContent = (i === total - 1) ? 'Send' : 'Next';
+  $('#qNext').textContent = (i === total - 1) ? 'გაგზავნა' : 'მომდევნო';
 
   $('#qStatus').textContent = '';
   $('#qStatus').className = 'q-status';
@@ -148,7 +148,7 @@ async function handleQuestionNext() {
 
   if (!value) {
     const status = $('#qStatus');
-    status.textContent = 'say something — anything.';
+    status.textContent = 'თქვი რაიმე, არ აქვს მნიშვნელობა რა';
     status.className = 'q-status is-error';
     input.focus();
     return;
