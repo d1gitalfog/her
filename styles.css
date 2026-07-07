@@ -3,6 +3,39 @@
    rules: no gradients, no emojis, monospace, sharp edges
    ============================================================ */
 
+/* self-hosted JetBrainsMono Nerd Font (woff2, ~900KB each)
+   - loaded locally so the site works offline and on github pages
+   - covers normal Latin + the Nerd Font icon glyphs (in case you
+     want to drop  /  / etc. into your text later) */
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('fonts/JetBrainsMonoNerdFont-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('fonts/JetBrainsMonoNerdFont-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('fonts/JetBrainsMonoNerdFont-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'JetBrainsMono Nerd Font';
+  src: url('fonts/JetBrainsMonoNerdFont-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #050608;
   --bg-soft: #0b0d11;
@@ -13,7 +46,7 @@
   --accent-dim: #0a8c80;
   --danger: #ff3b5c;
   --line: #1a1f25;
-  --font: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  --font: 'JetBrainsMono Nerd Font', 'SFMono-Regular', Menlo, Consolas, monospace;
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 

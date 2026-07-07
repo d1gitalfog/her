@@ -3,10 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>for you</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <title></title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -18,7 +15,7 @@
     <section id="scene-intro" class="scene is-active" aria-label="intro">
       <div class="intro-wrap">
         <div class="intro-lines" id="introLines"></div>
-        <div class="hint" id="introHint">[ click anywhere to continue ]</div>
+        <div class="hint" id="introHint">[ დააჭირე ნებისმიერ ადგილას გასაგრძელებლად ]</div>
       </div>
     </section>
 
@@ -31,11 +28,11 @@
           id="qInput"
           class="q-input"
           rows="4"
-          placeholder="type your answer..."
+          placeholder="ჩაწერე შენი პასუხი..."
           autocomplete="off"
         ></textarea>
         <div class="q-actions">
-          <button id="qNext" class="btn btn-accent" type="button">Next</button>
+          <button id="qNext" class="btn btn-accent" type="button">მომდევნო</button>
         </div>
         <div class="q-status" id="qStatus"></div>
       </div>
@@ -46,10 +43,10 @@
       <div class="m-wrap">
 
         <div class="m-prompt" id="musicPrompt">
-          <div class="m-question">You want to listen to some music?</div>
+          <div class="m-question">მუსიკას გინდა მოუსმინო?</div>
           <div class="m-choices">
-            <button id="musicYes" class="btn btn-accent" type="button">Yes</button>
-            <button id="musicNo" class="btn btn-ghost" type="button">No</button>
+            <button id="musicYes" class="btn btn-accent" type="button">კი</button>
+            <button id="musicNo" class="btn btn-ghost" type="button">არა</button>
           </div>
         </div>
 
@@ -69,8 +66,8 @@
             ></iframe>
           </div>
           <div class="m-actions">
-            <button id="mNext" class="btn btn-accent" type="button">Next</button>
-            <button id="mFinish" class="btn btn-accent" type="button" hidden>Finish</button>
+            <button id="mNext" class="btn btn-accent" type="button">მომდევნო</button>
+            <button id="mFinish" class="btn btn-accent" type="button" hidden>დასრულება</button>
           </div>
         </div>
 
@@ -81,14 +78,13 @@
     <section id="scene-final" class="scene" aria-label="final">
       <div class="f-wrap">
         <div class="f-text">
-          <p>So.</p>
-          <p>If you've made it this far,</p>
-          <p>maybe there's still something worth saying.</p>
-          <p class="f-ask">Do you want to keep talking? On WhatsApp, maybe.</p>
+          <p>მადლობა, რომ დრო დაუთმე ამას.</p>
+          <p>რაიმე კითხვები თუ გაქვს შეგიძლია მკითხო.</p>
+          <p class="f-ask">გავაგრძელოთ საუბარი?</p>
         </div>
         <div class="f-choices" id="fChoices">
-          <button id="fYes" class="btn btn-accent" type="button">Yes</button>
-          <button id="fNo" class="btn btn-ghost" type="button">No</button>
+          <button id="fYes" class="btn btn-accent" type="button">კი</button>
+          <button id="fNo" class="btn btn-ghost" type="button">არა</button>
         </div>
         <div class="f-response" id="fResponse"></div>
       </div>

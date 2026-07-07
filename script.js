@@ -5,9 +5,9 @@
 const CONFIG = {
   WEB3FORMS_ACCESS_KEY: '9dc31995-abfd-4b42-be06-4c5b648103ee',
 
-  WHATSAPP_NUMBER: '995593512200',
-
-  WHATSAPP_MESSAGE: 'ტესტ',
+  INTRO_FADE_DURATION: 2200,
+  INTRO_DELAY_BETWEEN_LINES: 2900,
+  INTRO_DELAY_BEFORE_HINT: 1700,
 
   INTRO_LINES: [
     'ჩემს ცხოვრებაში ორი ადამიანი შემხვედრია რომელმაც ჩემი შეხედულებები არა მხოლოდ გაიგო, არამედ იგრძნო და გაიაზრა.',
@@ -24,9 +24,11 @@ const CONFIG = {
   ],
 
   SONGS: [
-    { id: 'IjainiB8mk4', title: 'Deftones - Passenger' },
-    { id: 'zhMD7nt1LIg', title: 'U2 - Sunday Bloody Sunday' },
-    { id: 'qO-mSLxih-c', title: 'Sum 41 - Still Waiting' }
+    { id: 'uTen4lcHVAo', title: 'Deftones - Passenger' },
+    { id: '1UN7uSflwqw', title: 'Sum 41 - Thanks For Nothing' },
+    { id: 'FChMHEfzOLI', title: 'KoRn - Got the Life' },
+    { id: 'Iqlzoz_jH3c', title: 'U2 - Sunday Bloody Sunday' },
+    { id: 'hjlNzuB-cNQ', title: 'typeonegative - I Don\'t Wanna Be Me' }
   ]
 };
 
@@ -64,18 +66,21 @@ async function runIntro() {
   const container = $('#introLines');
   container.innerHTML = '';
 
+  // apply the configured fade duration to each line's transition
+  // (overrides the CSS default so config wins)
   for (const line of CONFIG.INTRO_LINES) {
     const p = document.createElement('p');
     p.className = 'line';
+    p.style.transitionDuration = CONFIG.INTRO_FADE_DURATION + 'ms';
     p.textContent = line;
     container.appendChild(p);
     // force reflow so the transition runs
     void p.offsetWidth;
     p.classList.add('is-visible');
-    await sleep(1900);
+    await sleep(CONFIG.INTRO_DELAY_BETWEEN_LINES);
   }
 
-  await sleep(700);
+  await sleep(CONFIG.INTRO_DELAY_BEFORE_HINT);
   $('#introHint').classList.add('is-visible');
 }
 
@@ -117,18 +122,14 @@ function renderQuestion() {
   $('#qStatus').className = 'q-status';
 }
 
-async function submitToWeb3Forms() {
-  const payload = {
-    access_key: CONFIG.WEB3FORMS_ACCESS_KEY,
-    subject: 'answers — from the site',
-    from_name: 'her answers',
-    q1: CONFIG.QUESTIONS[0],
-    a1: state.answers[0] || '(no answer)',
-    q2: CONFIG.QUESTIONS[1],
-    a2: state.answers[1] || '(no answer)',
-    q3: CONFIG.QUESTIONS[2],
-    a3: state.answers[2] || '(no answer)'
-  };
+async function submitToWeb3Forms(payload) {
+  const body = Object.assign(
+    {
+      access_key: CONFIG.WEB3FORMS_ACCESS_KEY,
+      from_name: 'her answers'
+    },
+    payload
+  );
 
   const res = await fetch('https://api.web3forms.com/submit', {
     method: 'POST',
@@ -136,7 +137,7 @@ async function submitToWeb3Forms() {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(body)
   });
   return res.json();
 }
@@ -166,23 +167,26 @@ async function handleQuestionNext() {
 
   // last question — submit
   btn.disabled = true;
-  btn.textContent = 'sending...';
+  btn.textContent = 'იგზავნება...';
   status.textContent = '';
   status.className = 'q-status';
 
   try {
     // fail-open: even if web3forms key isn't set, still let her move on
-    const data = await submitToWeb3Forms();
-    if (data && data.success) {
-      status.textContent = 'sent.';
-      status.className = 'q-status is-success';
-    } else {
-      status.textContent = 'sent.';   // soft fail message
-      status.className = 'q-status is-success';
-    }
+    const data = await submitToWeb3Forms({
+      subject: 'answers — from the site',
+      q1: CONFIG.QUESTIONS[0],
+      a1: state.answers[0] || '(no answer)',
+      q2: CONFIG.QUESTIONS[1],
+      a2: state.answers[1] || '(no answer)',
+      q3: CONFIG.QUESTIONS[2],
+      a3: state.answers[2] || '(no answer)'
+    });
+    status.textContent = 'გაიგზავნა';
+    status.className = 'q-status is-success';
   } catch (err) {
     // network error — don't punish her for it
-    status.textContent = 'sent.';
+    status.textContent = 'გაიგზავნა';
     status.className = 'q-status is-success';
   }
 
@@ -257,37 +261,43 @@ function handleMusicFinish() {
 }
 
 /* ============================================================
-   scene 4 — final (whatsapp)
+   scene 4 — final (her yes/no is sent via web3forms)
    ============================================================ */
 
-function openWhatsApp() {
-  const url =
-    'https://wa.me/' + CONFIG.WHATSAPP_NUMBER +
-    '?text=' + encodeURIComponent(CONFIG.WHATSAPP_MESSAGE);
-  window.open(url, '_blank', 'noopener');
+async function sendFinalChoice(choice) {
+  try {
+    await submitToWeb3Forms({
+      subject: 'her final answer',
+      final_question: 'do you want to keep talking?',
+      final_answer: choice
+    });
+  } catch (err) {
+    // fail-open — her choice was made, the network doesn't get to undo it
+  }
 }
 
-function handleFinalYes() {
+async function handleFinalYes() {
   $('#fChoices').style.opacity = '0.3';
   $('#fChoices').style.pointerEvents = 'none';
   const resp = $('#fResponse');
-  resp.textContent = 'opening whatsapp...';
+  resp.textContent = 'იგზავნება';
   resp.className = 'f-response is-visible is-yes';
 
-  setTimeout(() => {
-    openWhatsApp();
-    setTimeout(() => {
-      resp.textContent = 'if nothing opened, the link is in the window. take your time.';
-    }, 1500);
-  }, 700);
+  await sendFinalChoice('yes');
+
+  resp.textContent = 'მადლობა.';
 }
 
-function handleFinalNo() {
+async function handleFinalNo() {
   $('#fChoices').style.opacity = '0.3';
   $('#fChoices').style.pointerEvents = 'none';
   const resp = $('#fResponse');
-  resp.textContent = 'okay. i understand. take care.';
+  resp.textContent = 'იგზავნება';
   resp.className = 'f-response is-visible is-no';
+
+  await sendFinalChoice('no');
+
+  resp.textContent = 'კარგი, გასაგებია. კარგად.';
 }
 
 /* ============================================================
