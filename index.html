@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>for you</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <main id="app">
+
+    <!-- ============ SCENE 1: INTRO ============ -->
+    <section id="scene-intro" class="scene is-active" aria-label="intro">
+      <div class="intro-wrap">
+        <div class="intro-lines" id="introLines"></div>
+        <div class="hint" id="introHint">[ click anywhere to continue ]</div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 2: QUESTIONS ============ -->
+    <section id="scene-questions" class="scene" aria-label="questions">
+      <div class="q-wrap">
+        <div class="q-counter" id="qCounter">01 / 03</div>
+        <div class="q-text" id="qText"></div>
+        <textarea
+          id="qInput"
+          class="q-input"
+          rows="4"
+          placeholder="type your answer..."
+          autocomplete="off"
+        ></textarea>
+        <div class="q-actions">
+          <button id="qNext" class="btn btn-accent" type="button">Next</button>
+        </div>
+        <div class="q-status" id="qStatus"></div>
+      </div>
+    </section>
+
+    <!-- ============ SCENE 3: MUSIC ============ -->
+    <section id="scene-music" class="scene" aria-label="music">
+      <div class="m-wrap">
+
+        <div class="m-prompt" id="musicPrompt">
+          <div class="m-question">You want to listen to some music?</div>
+          <div class="m-choices">
+            <button id="musicYes" class="btn btn-accent" type="button">Yes</button>
+            <button id="musicNo" class="btn btn-ghost" type="button">No</button>
+          </div>
+        </div>
+
+        <div class="m-player" id="musicPlayer" hidden>
+          <div class="now-playing">
+            <span class="np-label">now playing</span>
+            <span class="np-title" id="npTitle"></span>
+          </div>
+          <div class="video-frame">
+            <iframe
+              id="ytPlayer"
+              src=""
+              title="music player"
+              frameborder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="m-actions">
+            <button id="mNext" class="btn btn-accent" type="button">Next</button>
+            <button id="mFinish" class="btn btn-accent" type="button" hidden>Finish</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============ SCENE 4: FINAL ============ -->
+    <section id="scene-final" class="scene" aria-label="final">
+      <div class="f-wrap">
+        <div class="f-text">
+          <p>So.</p>
+          <p>If you've made it this far,</p>
+          <p>maybe there's still something worth saying.</p>
+          <p class="f-ask">Do you want to keep talking? On WhatsApp, maybe.</p>
+        </div>
+        <div class="f-choices" id="fChoices">
+          <button id="fYes" class="btn btn-accent" type="button">Yes</button>
+          <button id="fNo" class="btn btn-ghost" type="button">No</button>
+        </div>
+        <div class="f-response" id="fResponse"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

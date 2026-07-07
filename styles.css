@@ -1,0 +1,452 @@
+/* ============================================================
+   theme: cyberpunk minimalist
+   rules: no gradients, no emojis, monospace, sharp edges
+   ============================================================ */
+
+:root {
+  --bg: #050608;
+  --bg-soft: #0b0d11;
+  --ink: #d7dde3;
+  --ink-dim: #6b7480;
+  --ink-faint: #3a4049;
+  --accent: #00ffe1;
+  --accent-dim: #0a8c80;
+  --danger: #ff3b5c;
+  --line: #1a1f25;
+  --font: 'JetBrains Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  position: relative;
+}
+
+/* faint CRT scanlines — solid color, not a gradient */
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.018) 0px,
+    rgba(255, 255, 255, 0.018) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* tiny corner brackets — cyberpunk framing */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--accent-dim);
+  z-index: 99;
+  pointer-events: none;
+  opacity: 0.5;
+}
+body::before { top: 14px; left: 14px; border-right: none; border-bottom: none; }
+body::after  { bottom: 14px; right: 14px; border-left: none; border-top: none; }
+
+/* ============================================================
+   scene system
+   ============================================================ */
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 700ms var(--ease);
+}
+
+.scene.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ============================================================
+   scene 1 — intro
+   ============================================================ */
+
+.intro-wrap {
+  width: 100%;
+  max-width: 640px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.intro-lines .line {
+  margin: 0 0 1.6em 0;
+  font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+  font-weight: 300;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1200ms var(--ease), transform 1200ms var(--ease);
+  text-shadow: 0 0 12px rgba(0, 255, 225, 0.06);
+}
+
+.intro-lines .line.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.intro-lines .line:last-child {
+  margin-bottom: 2.8em;
+}
+
+.hint {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  opacity: 0;
+  transition: opacity 900ms var(--ease);
+  border-left: 1px solid var(--accent-dim);
+  padding-left: 12px;
+}
+
+.hint.is-visible { opacity: 0.7; }
+.hint.is-visible::after {
+  content: '_';
+  animation: blink 1s steps(2, start) infinite;
+  color: var(--accent);
+  margin-left: 4px;
+}
+
+@keyframes blink {
+  to { opacity: 0; }
+}
+
+/* ============================================================
+   scene 2 — questions
+   ============================================================ */
+
+.q-wrap {
+  width: 100%;
+  max-width: 620px;
+}
+
+.q-counter {
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  color: var(--accent-dim);
+  margin-bottom: 1.8em;
+  text-transform: uppercase;
+}
+
+.q-text {
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 1.6em;
+  line-height: 1.4;
+  text-shadow: 0 0 14px rgba(0, 255, 225, 0.08);
+  opacity: 0;
+  transform: translateY(6px);
+  animation: qIn 700ms var(--ease) forwards;
+}
+
+@keyframes qIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.q-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.7;
+  padding: 10px 4px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 300ms var(--ease);
+  letter-spacing: 0.01em;
+}
+
+.q-input::placeholder {
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.q-input:focus {
+  border-bottom-color: var(--accent);
+}
+
+.q-actions {
+  margin-top: 2.4em;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.q-status {
+  margin-top: 1em;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-dim);
+  min-height: 1.2em;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.q-status.is-error   { color: var(--danger); }
+.q-status.is-success { color: var(--accent); }
+
+/* ============================================================
+   scene 3 — music
+   ============================================================ */
+
+.m-wrap {
+  width: 100%;
+  max-width: 720px;
+  text-align: center;
+}
+
+.m-prompt {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: qIn 700ms var(--ease) forwards;
+}
+
+.m-question {
+  font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+  margin-bottom: 2em;
+  color: var(--ink);
+  text-shadow: 0 0 14px rgba(0, 255, 225, 0.08);
+}
+
+.m-choices {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.m-player {
+  opacity: 0;
+  animation: qIn 600ms var(--ease) forwards;
+}
+
+.now-playing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.4em;
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+.np-label { color: var(--accent-dim); }
+.np-title { color: var(--ink); margin-top: 6px; font-size: 0.9rem; }
+
+.video-frame {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+  overflow: hidden;
+}
+
+.video-frame::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 14px; height: 14px;
+  border-top: 1px solid var(--accent);
+  border-left: 1px solid var(--accent);
+  z-index: 2;
+}
+.video-frame::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 14px; height: 14px;
+  border-bottom: 1px solid var(--accent);
+  border-right: 1px solid var(--accent);
+  z-index: 2;
+}
+
+.video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.m-actions {
+  margin-top: 2em;
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+}
+
+/* ============================================================
+   scene 4 — final
+   ============================================================ */
+
+.f-wrap {
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+}
+
+.f-text p {
+  margin: 0 0 1em 0;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 300;
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(8px);
+  animation: qIn 800ms var(--ease) forwards;
+}
+
+.f-text p:nth-child(1) { animation-delay: 0ms; }
+.f-text p:nth-child(2) { animation-delay: 500ms; }
+.f-text p:nth-child(3) { animation-delay: 1100ms; }
+
+.f-ask {
+  margin-top: 1.6em !important;
+  color: var(--accent) !important;
+  font-weight: 400 !important;
+  animation-delay: 1900ms !important;
+  text-shadow: 0 0 14px rgba(0, 255, 225, 0.12);
+}
+
+.f-choices {
+  margin-top: 2.6em;
+  display: flex;
+  gap: 16px;
+  opacity: 0;
+  animation: qIn 800ms var(--ease) 2400ms forwards;
+}
+
+.f-response {
+  margin-top: 2em;
+  font-size: 1rem;
+  color: var(--ink-dim);
+  min-height: 1.4em;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 700ms var(--ease);
+}
+
+.f-response.is-visible { opacity: 1; }
+.f-response.is-yes { color: var(--accent); }
+.f-response.is-no  { color: var(--ink-dim); }
+
+/* ============================================================
+   buttons
+   ============================================================ */
+
+.btn {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 12px 26px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 280ms var(--ease);
+  position: relative;
+  outline: none;
+}
+
+.btn:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.btn-accent {
+  color: var(--accent);
+  border-color: var(--accent-dim);
+}
+
+.btn-accent:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(0, 255, 225, 0.25);
+}
+
+.btn-ghost {
+  color: var(--ink-dim);
+  border-color: var(--line);
+}
+
+.btn-ghost:hover {
+  color: var(--ink);
+  border-color: var(--ink-dim);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   responsive
+   ============================================================ */
+
+@media (max-width: 600px) {
+  body { overflow-y: auto; }
+  .scene {
+    position: absolute;
+    padding: 22vw 6vw 12vw;
+    align-items: flex-start;
+  }
+  #scene-intro .scene,
+  .scene { padding-top: 18vh; }
+  body::before, body::after { width: 14px; height: 14px; }
+  .btn { padding: 11px 20px; font-size: 0.74rem; letter-spacing: 0.18em; }
+  .f-choices, .m-choices { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+  .scanlines { display: none; }
+}
