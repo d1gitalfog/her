@@ -3,37 +3,29 @@
    ============================================================ */
 
 const CONFIG = {
+  WEB3FORMS_ACCESS_KEY: '9dc31995-abfd-4b42-be06-4c5b648103ee',
 
-  // 1. get your access key at https://web3forms.com (free)
-  WEB3FORMS_ACCESS_KEY: 'YOUR_ACCESS_KEY_HERE',
+  WHATSAPP_NUMBER: '995593512200',
 
-  // 2. your whatsapp number in international format, no +, no spaces
-  //    e.g. 14155552671 for US, 447700900123 for UK
-  WHATSAPP_NUMBER: '0000000000',
+  WHATSAPP_MESSAGE: 'ტესტ',
 
-  // 3. the message that pre-fills whatsapp when she taps "Yes"
-  WHATSAPP_MESSAGE: 'i saw your site. i think i want to talk.',
-
-  // 4. intro lines — fade in one by one
   INTRO_LINES: [
-    'hey.',
-    'i\'ve been thinking.',
-    'there are things i never got to ask you.',
-    'take your time with this.'
+    'ჩემს ცხოვრებაში ორი ადამიანი შემხვედრია რომელმაც ჩემი შეხედულებები არა მხოლოდ გაიგო, არამედ იგრძნო და გაიაზრა.',
+    'აქედან ერთი სანდროა, პირველი კი შენ ხარ.',
+    'არ ვცდილობ არანაირი მიზნის მიღწევას ამ საუბრით, უფრო ჩემს გრძნობებს გიზიარებ.',
+    'ერთი რამ რაც ძნელი გზით ვისწავლე ის არის, რომ თუ ტვინი ისაა რითაც გზას იკვლევ, მაშინ გული ისაა რაც ძალას გაძლევს რომ იარო.'
   ],
 
-  // 5. the 3 questions
   QUESTIONS: [
-    'what\'s one moment you wish we could relive?',
-    'what\'s something you never told me?',
-    'if you could change one thing between us, what would it be?'
+    'რატომ დამთანხმდი ამაზე?',
+    'გარედან ძალიან შეიცვალე, შიგნით ისევ იგივეა?',
+    'ისევ გაქვს შენი ოცნებები და მიზნები?'
   ],
 
-  // 6. youtube video ids (replace with songs you pick)
-  //    find the id in any youtube url:  youtube.com/watch?v=XXXXXXX  -> XXXXXXX is the id
   SONGS: [
-    { id: 'VIDEO_ID_1', title: 'placeholder song one' },
-    { id: 'VIDEO_ID_2', title: 'placeholder song two' }
+    { id: 'IjainiB8mk4', title: 'Deftones - Passenger' },
+    { id: 'zhMD7nt1LIg', title: 'U2 - Sunday Bloody Sunday' },
+    { id: 'qO-mSLxih-c', title: 'Sum 41 - Still Waiting' }
   ]
 };
 
